@@ -1,8 +1,24 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  var socket = io('http://localhost');
-  socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
+  const debug = true;
+  let socket = io('http://localhost');
+  socket.on('type', function () {
+    if (debug) console.info('Recived type request', 'user');
+    socket.emit('type', 'user');
   });
+  socket.on('auth', function () {
+    if (debug) console.info('Recived auth request');
+    let username = prompt('username:');
+    let password = prompt('password:');
+    socket.emit('auth', {username, password});
+    if (debug) console.info('Sended auth data');
+  });
+
+  socket.on('serverList', function(serverList) {
+    if (debug) console.info('Recived server list', serverList);
+  });
+
+  socket.on('newServer', function(serverName) {
+    if (debug) console.info('Recived new server', serverName);
+  })
 </script>
